@@ -1,0 +1,6 @@
+{
+  "name": "Paper Arena",
+  "description": "Paper.io 2 style 360-degree territory capture arcade game with real-time online multiplayer, random matchmaking, and private game rooms.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

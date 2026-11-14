@@ -1,0 +1,245 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "Player profile, selected skin, and lifetime arcade stats.",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "Authenticated Firebase user UID."
+        },
+        "displayName": {
+          "type": "string",
+          "description": "Player display name shown in arena and leaderboard."
+        },
+        "selectedSkinId": {
+          "type": "string",
+          "description": "Currently equipped Paper Arena character skin ID."
+        },
+        "bestPercentage": {
+          "type": "number",
+          "description": "Highest map territory percentage conquered (0-100)."
+        },
+        "totalKills": {
+          "type": "integer",
+          "description": "Cumulative opponents eliminated."
+        },
+        "wins": {
+          "type": "integer",
+          "description": "Total match victories."
+        },
+        "matchesPlayed": {
+          "type": "integer",
+          "description": "Total matches played."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp set via FieldValue.serverTimestamp()."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp set via FieldValue.serverTimestamp()."
+        }
+      },
+      "required": [
+        "userId",
+        "displayName",
+        "selectedSkinId",
+        "bestPercentage",
+        "totalKills",
+        "wins",
+        "matchesPlayed",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "GameRoom": {
+      "title": "GameRoom",
+      "description": "Online multiplayer lobby and match state for random matchmaking and private rooms.",
+      "type": "object",
+      "properties": {
+        "hostId": {
+          "type": "string",
+          "description": "UID of the player who created the room."
+        },
+        "roomCode": {
+          "type": "string",
+          "description": "Shareable alphanumeric code for private rooms or PUBLIC for matchmaking."
+        },
+        "isPrivate": {
+          "type": "boolean",
+          "description": "True for private invite-code rooms, false for public random matchmaking."
+        },
+        "status": {
+          "type": "string",
+          "enum": ["waiting", "playing", "finished"],
+          "description": "Current lifecycle state of the multiplayer room."
+        },
+        "maxPlayers": {
+          "type": "integer",
+          "description": "Maximum human participants allowed in the room (2-8)."
+        },
+        "fillWithBots": {
+          "type": "boolean",
+          "description": "Whether AI bots fill remaining arena slots on match start."
+        },
+        "playerUids": {
+          "type": "array",
+          "description": "Bounded list (max 8) of participant UIDs."
+        },
+        "playerProfiles": {
+          "type": "array",
+          "description": "Bounded list (max 8) of packed participant summaries (uid|name|skinId)."
+        },
+        "winnerUid": {
+          "type": "string",
+          "description": "Optional UID of the match winner."
+        },
+        "winnerName": {
+          "type": "string",
+          "description": "Optional display name of the match winner."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp set via FieldValue.serverTimestamp()."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp set via FieldValue.serverTimestamp()."
+        }
+      },
+      "required": [
+        "hostId",
+        "roomCode",
+        "isPrivate",
+        "status",
+        "maxPlayers",
+        "fillWithBots",
+        "playerUids",
+        "playerProfiles",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "RoomPlayer": {
+      "title": "RoomPlayer",
+      "description": "Real-time position, trail, and territory state for a player inside an active multiplayer match.",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "Participant UID matching document ID."
+        },
+        "roomId": {
+          "type": "string",
+          "description": "Parent room document ID."
+        },
+        "displayName": {
+          "type": "string",
+          "description": "Player display name."
+        },
+        "skinId": {
+          "type": "string",
+          "description": "Equipped skin ID."
+        },
+        "colorIndex": {
+          "type": "integer",
+          "description": "Assigned arena slot/color index (0-15)."
+        },
+        "memberUids": {
+          "type": "array",
+          "description": "Denormalized room participant UIDs (max 8) for flat rule evaluation."
+        },
+        "x": {
+          "type": "number",
+          "description": "World X coordinate inside circular arena."
+        },
+        "y": {
+          "type": "number",
+          "description": "World Y coordinate inside circular arena."
+        },
+        "angle": {
+          "type": "number",
+          "description": "Movement heading in radians."
+        },
+        "percentage": {
+          "type": "number",
+          "description": "Current territory coverage percentage (0-100)."
+        },
+        "kills": {
+          "type": "integer",
+          "description": "Eliminations scored in this match."
+        },
+        "alive": {
+          "type": "boolean",
+          "description": "Whether the player is still alive in the match."
+        },
+        "trailPacked": {
+          "type": "string",
+          "description": "Compact serialized polyline of current exposed trail points."
+        },
+        "territoryPacked": {
+          "type": "string",
+          "description": "Run-length encoded cell ownership mask for real-time territory sync."
+        },
+        "claimedKillUid": {
+          "type": "string",
+          "description": "Optional UID of opponent whose trail this player just cut."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp set via FieldValue.serverTimestamp()."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp set via FieldValue.serverTimestamp()."
+        }
+      },
+      "required": [
+        "userId",
+        "roomId",
+        "displayName",
+        "skinId",
+        "colorIndex",
+        "memberUids",
+        "x",
+        "y",
+        "angle",
+        "percentage",
+        "kills",
+        "alive",
+        "trailPacked",
+        "territoryPacked",
+        "createdAt",
+        "updatedAt"
+      ]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": {
+        "$ref": "#/entities/UserProfile"
+      },
+      "description": "Per-user arcade profile, selected skin, and personal high score records."
+    },
+    "/rooms/{roomId}": {
+      "schema": {
+        "$ref": "#/entities/GameRoom"
+      },
+      "description": "Multiplayer match rooms supporting random matchmaking and private invite codes."
+    },
+    "/rooms/{roomId}/players/{playerId}": {
+      "schema": {
+        "$ref": "#/entities/RoomPlayer"
+      },
+      "description": "Live multiplayer arena state per participant within a room."
+    }
+  }
+}
